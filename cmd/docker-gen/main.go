@@ -9,8 +9,8 @@ import (
 	"sync"
 
 	"github.com/BurntSushi/toml"
+	"github.com/docker-gen"
 	docker "github.com/fsouza/go-dockerclient"
-	"github.com/jwilder/docker-gen"
 )
 
 type stringslice []string

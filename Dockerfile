@@ -1,5 +1,5 @@
 FROM alpine:latest
-MAINTAINER Jason Wilder <mail@jasonwilder.com>
+MAINTAINER Muhammad Sagheer <msagheer92@gmail.com>
 
 RUN apk -U add openssl
 

@@ -389,7 +389,7 @@ func (g *generator) getContainers() ([]*RuntimeContainer, error) {
 			IP6LinkLocal: container.NetworkSettings.LinkLocalIPv6Address,
 			IP6Global:    container.NetworkSettings.GlobalIPv6Address,
 		}
-		for k, v := range container.NetworkSettings.Ports {
+		for k, _ := range container.Config.ExposedPorts {
 			address := Address{
 				IP:           container.NetworkSettings.IPAddress,
 				IP6LinkLocal: container.NetworkSettings.LinkLocalIPv6Address,
@@ -397,9 +397,15 @@ func (g *generator) getContainers() ([]*RuntimeContainer, error) {
 				Port:         k.Port(),
 				Proto:        k.Proto(),
 			}
-			if len(v) > 0 {
-				address.HostPort = v[0].HostPort
-				address.HostIP = v[0].HostIP
+			portbindings := container.HostConfig.PortBindings[k]
+
+			if len(portbindings) > 0 {
+				address.HostPort = portbindings[0].HostPort
+				if portbindings[0].HostIP == "" {
+					address.HostIP = "0.0.0.0"
+				} else {
+					address.HostIP = portbindings[0].HostIP
+				}
 			}
 			runtimeContainer.Addresses = append(runtimeContainer.Addresses,
 				address)
